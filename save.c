@@ -101,7 +101,7 @@ void load_score(SDL_Surface **ecran)
 
   TTF_Init();
 
-  police = TTF_OpenFont("TP/sdl/DejaVuSerif.ttf",14);
+  police = TTF_OpenFont("Fonts/DejaVuSerif.ttf",14);
   TTF_SetFontStyle(police,TTF_STYLE_ITALIC);
 
   pos.x = (*ecran)->w / 2 - 150;

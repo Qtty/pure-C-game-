@@ -856,7 +856,7 @@ void play(SDL_Surface **ecran,field *gr,choices *T,int *scr,int *Gtime,int best,
   if(!sit) pt -= (*Gtime) * 60;
 
   TTF_Init();
-  police = TTF_OpenFont("TP/sdl/DejaVuSerif.ttf",20);
+  police = TTF_OpenFont("Fonts/DejaVuSerif.ttf",20);
   TTF_SetFontStyle(police,TTF_STYLE_ITALIC);
   tmp = TTF_RenderText_Shaded(police,"Pause",black,bck);
 

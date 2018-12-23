@@ -21,7 +21,7 @@ opt st_menu(SDL_Surface **ecran)
 
   TTF_Init();
 
-  police = TTF_OpenFont("TP/sdl/DejaVuSerif.ttf",30);
+  police = TTF_OpenFont("Fonts/DejaVuSerif.ttf",30);
   TTF_SetFontStyle(police,TTF_STYLE_ITALIC);
   pos.x = (*ecran)->w / 2 - 100;
   pos.y = 100;
@@ -56,7 +56,7 @@ void best_scores(SDL_Surface **ecran)
   back = IMG_Load("sprites/back.png");
   SDL_BlitSurface(back,NULL,*ecran,&p);
 
-  police = TTF_OpenFont("TP/sdl/DejaVuSerif.ttf",20);
+  police = TTF_OpenFont("Fonts/DejaVuSerif.ttf",20);
   TTF_SetFontStyle(police,TTF_STYLE_ITALIC);
   pos.x = 20;
   pos.y = 150;
@@ -240,7 +240,7 @@ void round_menu(SDL_Surface **ecran,int score,int best,int time,int clr)
   else colr = blue;
 
 
-  police = TTF_OpenFont("TP/sdl/DejaVuSerif.ttf",20);
+  police = TTF_OpenFont("Fonts/DejaVuSerif.ttf",20);
   TTF_SetFontStyle(police,TTF_STYLE_ITALIC);
   pos.x = 360;
   pos.y = 50;
@@ -282,7 +282,7 @@ void pause(SDL_Surface **ecran,int score,int best,choices T,field grille,int Gti
 
   sprintf(scr[1], "Score : %d", score);
   sprintf(scr[0], "Best : %d", best);
-  police = TTF_OpenFont("TP/sdl/DejaVuSerif.ttf",30);
+  police = TTF_OpenFont("Fonts/DejaVuSerif.ttf",30);
   TTF_SetFontStyle(police,TTF_STYLE_ITALIC);
   w = (*ecran)->w / 2 - 150;
   pos.x = w;
@@ -298,7 +298,7 @@ void pause(SDL_Surface **ecran,int score,int best,choices T,field grille,int Gti
   pos.y = 0;
   load_score(ecran);
   SDL_BlitSurface(*ecran,NULL,back,&pos);
-  police = TTF_OpenFont("TP/sdl/DejaVuSerif.ttf",20);
+  police = TTF_OpenFont("Fonts/DejaVuSerif.ttf",20);
   pos.x = w;
   pos.y = 150;
   for(size_t i=0;i<3;i++)
@@ -338,7 +338,7 @@ void pause(SDL_Surface **ecran,int score,int best,choices T,field grille,int Gti
               pos.y = 0;
               back = IMG_Load("sprites/back.png");
               SDL_BlitSurface(back,NULL,*ecran,&pos);
-              police = TTF_OpenFont("TP/sdl/DejaVuSerif.ttf",30);
+              police = TTF_OpenFont("Fonts/DejaVuSerif.ttf",30);
               tmp = TTF_RenderText_Blended(police,"Saved Succesfully!!",black);
               pos.x = (*ecran)->w / 2 - tmp->w / 2;
               pos.y = (*ecran)->h / 2 - tmp->h / 2;
@@ -437,7 +437,7 @@ void game_over(SDL_Surface **ecran,int sit,int score,int best,int *cnt)
     SDL_BlitSurface(back,NULL,*ecran,&pos);
 
     sprintf(scr, "Score : %d", score);
-    police = TTF_OpenFont("TP/sdl/DejaVuSerif.ttf",30);
+    police = TTF_OpenFont("Fonts/DejaVuSerif.ttf",30);
     TTF_SetFontStyle(police,TTF_STYLE_ITALIC);
     w[0] = (*ecran)->w / 2 - 150;
     w[1] = (*ecran)->w / 2 + 70;
@@ -458,7 +458,7 @@ void game_over(SDL_Surface **ecran,int sit,int score,int best,int *cnt)
     pos.x = 0;
     pos.y = 0;
     SDL_BlitSurface(*ecran,NULL,back,&pos);
-    police = TTF_OpenFont("TP/sdl/DejaVuSerif.ttf",20);
+    police = TTF_OpenFont("Fonts/DejaVuSerif.ttf",20);
     pos.y = 150;
     for(size_t i=0;i<2;i++)
     {
@@ -471,7 +471,7 @@ void game_over(SDL_Surface **ecran,int sit,int score,int best,int *cnt)
     }
     SDL_BlitSurface(*ecran,NULL,swp1,&p);
 
-    police = TTF_OpenFont("TP/sdl/DejaVuSerif.ttf",30);
+    police = TTF_OpenFont("Fonts/DejaVuSerif.ttf",30);
     tmp = TTF_RenderText_Blended(police,"type in your name:",black);
     pos.x = a - 30;
     pos.y = 300;
@@ -539,7 +539,7 @@ void game_over(SDL_Surface **ecran,int sit,int score,int best,int *cnt)
           {
             int len;
             len = strlen(name);
-            police = TTF_OpenFont("TP/sdl/DejaVuSerif.ttf",30);
+            police = TTF_OpenFont("Fonts/DejaVuSerif.ttf",30);
             if(event.key.keysym.sym == SDLK_SPACE) strcat(name," ");
             else strcat(name,SDL_GetKeyName(event.key.keysym.sym));
             tmp = TTF_RenderText_Blended(police,name,black);
@@ -552,7 +552,7 @@ void game_over(SDL_Surface **ecran,int sit,int score,int best,int *cnt)
           else
           {
             SDL_BlitSurface(swp1,NULL,*ecran,&p);
-            police = TTF_OpenFont("TP/sdl/DejaVuSerif.ttf",30);
+            police = TTF_OpenFont("Fonts/DejaVuSerif.ttf",30);
             tmp = TTF_RenderText_Blended(police,"scoreboard updated!!",black);
             pos.x = a - 50;
             pos.y = 300;
