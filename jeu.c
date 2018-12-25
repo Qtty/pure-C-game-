@@ -101,9 +101,9 @@ LS cords(field grill)
 		tar = desempiler(&p);
 		if(grill.f[tar.x][tar.y] == 1)
 		{
-      grill.f[tar.x][tar.y] = -1;
-      tmp.x = tar.x - init.x;
-      tmp.y = tar.y - init.y;
+     			grill.f[tar.x][tar.y] = -1;
+   			tmp.x = tar.x - init.x;
+  			tmp.y = tar.y - init.y;
 			empiler(&q,tmp);
 			if(tar.x - 1 >=0)
 			{
@@ -134,7 +134,7 @@ LS cords(field grill)
   return q;
 }
 
-void init_field(field *grill,int c)
+void init_field(field *grill,int c) //sets all the slots in the matrice to an integer c
 {
   int i,j;
 
@@ -147,7 +147,7 @@ void init_field(field *grill,int c)
   }
 }
 
-void init(SDL_Surface **ecran,int x,int y)
+void init(SDL_Surface **ecran,int x,int y) //initialize the screen
 {
   SDL_Init(SDL_INIT_VIDEO);
 
@@ -213,7 +213,7 @@ choices draw(SDL_Surface **ecran,SDL_Surface *objs[54],int best) // draws the in
   return t;
 }
 
-int check(int x,int b1,int b2)
+int check(int x,int b1,int b2) //checks if an integer is in an interval
 {
   if((x>=b1)&&(x<=b2))
   {
