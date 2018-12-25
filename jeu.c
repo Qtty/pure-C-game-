@@ -1,20 +1,20 @@
-typedef struct choices
+typedef struct choices //a struct containing the three pieces to choose from
 {
   int c[3];
 }choices;
 
-typedef struct field
+typedef struct field //a struct containing the matrice that simulates the field,meaning the free and used slots in the field
 {
   int f[10][10];
 }field;
 
-typedef struct cord
+typedef struct cord // a struct that represents the coordinates of a field slot
 {
 
 	int x,y;
 }cord;
 
-typedef struct cellule
+typedef struct cellule //a type representing linked chains 
 {
 
 	struct cellule  *nxt;
@@ -22,18 +22,6 @@ typedef struct cellule
 	cord info;
 
 }*LS;
-
-void print_mat(field gr)
-{
-  for(size_t i=0;i<10;i++)
-  {
-    for(size_t j=0;j<10;j++)
-    {
-      printf("%d\t",gr.f[j][i]);
-    }
-    printf("\n");
-  }
-}
 
 LS cree_noued()
 {
@@ -113,9 +101,9 @@ LS cords(field grill)
 		tar = desempiler(&p);
 		if(grill.f[tar.x][tar.y] == 1)
 		{
-      grill.f[tar.x][tar.y] = -1;
-      tmp.x = tar.x - init.x;
-      tmp.y = tar.y - init.y;
+     			grill.f[tar.x][tar.y] = -1;
+   			tmp.x = tar.x - init.x;
+  			tmp.y = tar.y - init.y;
 			empiler(&q,tmp);
 			if(tar.x - 1 >=0)
 			{
@@ -146,7 +134,7 @@ LS cords(field grill)
   return q;
 }
 
-void init_field(field *grill,int c)
+void init_field(field *grill,int c) //sets all the slots in the matrice to an integer c
 {
   int i,j;
 
@@ -159,7 +147,7 @@ void init_field(field *grill,int c)
   }
 }
 
-void init(SDL_Surface **ecran,int x,int y)
+void init(SDL_Surface **ecran,int x,int y) //initialize the screen
 {
   SDL_Init(SDL_INIT_VIDEO);
 
@@ -168,7 +156,7 @@ void init(SDL_Surface **ecran,int x,int y)
 
 }
 
-choices draw(SDL_Surface **ecran,SDL_Surface *objs[54],int best)
+choices draw(SDL_Surface **ecran,SDL_Surface *objs[54],int best) // draws the initial state of the screen
 {
   SDL_Surface *tmp = NULL,*obj[27];
   choices t;
@@ -225,7 +213,7 @@ choices draw(SDL_Surface **ecran,SDL_Surface *objs[54],int best)
   return t;
 }
 
-int check(int x,int b1,int b2)
+int check(int x,int b1,int b2) //checks if an integer is in an interval
 {
   if((x>=b1)&&(x<=b2))
   {
@@ -266,7 +254,7 @@ void b3(int i,field *grill,SDL_Rect pos)
   }
 }
 
-void check_lines(SDL_Surface **ecran,field *grill,int *line)
+void check_lines(SDL_Surface **ecran,field *grill,int *line)//checks if there is any complete lines or columns
 {
   int i,j,ok;
   SDL_Surface *tmp = NULL,*tmp1 = NULL;
@@ -488,7 +476,7 @@ void b53(int i,field *grill,SDL_Rect pos)
   }
 }
 
-int handle(int i,field *grill,field *grill1,SDL_Rect pos,int *nb_blc)
+int handle(int i,field *grill,field *grill1,SDL_Rect pos,int *nb_blc) //checks if the place is empty for the piece to be blitted
 {
   int j,j1,ok = 1;
 
@@ -696,7 +684,7 @@ int handle(int i,field *grill,field *grill1,SDL_Rect pos,int *nb_blc)
         return ok;
 }
 
-void handle_score(int *score,int lines)
+void handle_score(int *score,int lines) //updates the scores in case of a line(s)/column(s) completion
 {
   switch (lines)
   {
@@ -718,7 +706,7 @@ void handle_score(int *score,int lines)
   }
 }
 
-int check_game(choices t,field *grille)
+int check_game(choices t,field *grille) //checks if there is any empty place to one of the pieces,if there is no place for any one of the three pieces,the game is over ^___^
 {
   field grille1,grill2;
   SDL_Rect pos;
@@ -767,7 +755,7 @@ int check_game(choices t,field *grille)
 
 }
 
-void drag(SDL_Surface **ecran,SDL_Surface *piece,field *grill,choices *t,int i,SDL_Surface *obj[54],int *score)
+void drag(SDL_Surface **ecran,SDL_Surface *piece,field *grill,choices *t,int i,SDL_Surface *obj[54],int *score) //handles the drag and the blit of a piece in the screen and updates the field matrice in case of a blitting
 {
   SDL_Surface *ec = NULL,*tmp = NULL;
   SDL_Rect pos,p;
@@ -839,7 +827,7 @@ void drag(SDL_Surface **ecran,SDL_Surface *piece,field *grill,choices *t,int i,S
 
 }
 
-void play(SDL_Surface **ecran,field *gr,choices *T,int *scr,int *Gtime,int best,int sit)
+void play(SDL_Surface **ecran,field *gr,choices *T,int *scr,int *Gtime,int best,int sit) //handles the screen,initializes the pieces in an array,initializes the field matrice into zeros,handles the selection in the round menu and updates the round informations
 {
   SDL_Surface *objs[54],*tmp = NULL;
   SDL_Event event;

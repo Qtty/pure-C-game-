@@ -1,10 +1,10 @@
-typedef struct p
+typedef struct p //a struct that contains a player's infos in a round
 {
   int score;
   char ct[60],name[20];
 }player;
 
-void save(SDL_Surface **ecran,field grille,choices T,int scr,int Time)
+void save(SDL_Surface **ecran,field grille,choices T,int scr,int Time) // saves the infos of a paused round
 {
   FILE *infos;
   game gm;
@@ -20,7 +20,7 @@ void save(SDL_Surface **ecran,field grille,choices T,int scr,int Time)
   fclose(infos);
 }
 
-int load(SDL_Surface **ecran,game *gm)
+int load(SDL_Surface **ecran,game *gm) //loads the infos of a paused round
 {
   FILE *infos;
   SDL_Surface *tmp = NULL;
@@ -48,7 +48,7 @@ int load(SDL_Surface **ecran,game *gm)
 
 }
 
-void add_score(int score,char usr[20])
+void add_score(int score,char usr[20]) //adds a player to the scoreboard
 {
   FILE *scr;
   player p,l[5];
@@ -88,7 +88,7 @@ void add_score(int score,char usr[20])
   fclose(scr);
 }
 
-void load_score(SDL_Surface **ecran)
+void load_score(SDL_Surface **ecran) //loads the scoreboard containing the top 5 players 
 {
   FILE *scr;
   SDL_Surface *tmp = NULL;
@@ -134,7 +134,7 @@ void load_score(SDL_Surface **ecran)
   TTF_CloseFont(police);
 }
 
-int best()
+int best() //loads the best score yet
 {
   FILE *scr;
   player p;

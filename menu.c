@@ -1,9 +1,10 @@
 
-typedef struct opt
+typedef struct opt //a sturct that contains the surfaces of the options in two colors:black and blue
 {
   SDL_Surface *t[12];
 }opt;
-typedef struct game
+
+typedef struct game //a struct that contains the infos of a round
 {
   field gr;
   choices T;
@@ -11,7 +12,7 @@ typedef struct game
   int Gtime;
 }game;
 
-opt st_menu(SDL_Surface **ecran)
+opt st_menu(SDL_Surface **ecran) //draws the start menu containing the game modes,scoreboard and quit ^___^!
 {
   opt options;
   char opti[6][20] = {"New Game","Continue","Skynet","Man VS Machine","Best Scores","Quit"};
@@ -39,7 +40,7 @@ opt st_menu(SDL_Surface **ecran)
 
 }
 
-void best_scores(SDL_Surface **ecran)
+void best_scores(SDL_Surface **ecran) //shows the top 5 players in the scoreboard
 {
   TTF_Font *police = NULL;
   SDL_Color black = {0,0,0},blue = {0,0,255};
@@ -126,7 +127,7 @@ void best_scores(SDL_Surface **ecran)
   TTF_Quit();
 }
 
-void menu(SDL_Surface **ecran)
+void menu(SDL_Surface **ecran) //handles the changes in the start menu(selection,mouse motion,...)
 {
     SDL_Surface *tmp,*tmp1 = NULL;
     opt options;
@@ -223,7 +224,7 @@ void menu(SDL_Surface **ecran)
     TTF_Quit();
 }
 
-void round_menu(SDL_Surface **ecran,int score,int best,int time,int clr)
+void round_menu(SDL_Surface **ecran,int score,int best,int time,int clr) //draws the round menu(pause,score,best socre,time elapsed)
 {
   SDL_Surface *tmp = NULL;
   TTF_Font *police = NULL;
@@ -256,7 +257,7 @@ void round_menu(SDL_Surface **ecran,int score,int best,int time,int clr)
   TTF_Quit();
 }
 
-void pause(SDL_Surface **ecran,int score,int best,choices T,field grille,int Gtime,int *cnt)
+void pause(SDL_Surface **ecran,int score,int best,choices T,field grille,int Gtime,int *cnt) //draws and handles the pause menu(save,continue,replay,shows score,shows best score,shows scoreboard)
 {
   SDL_Surface *tmp = NULL,*swp = NULL,*back = NULL;
   TTF_Font *police = NULL;
@@ -408,7 +409,7 @@ void pause(SDL_Surface **ecran,int score,int best,choices T,field grille,int Gti
     }
 }
 
-void game_over(SDL_Surface **ecran,int sit,int score,int best,int *cnt)
+void game_over(SDL_Surface **ecran,int sit,int score,int best,int *cnt) //draws and handles the game-over menu(adds the player to the scoreboard,replay,quit,shows score,shows best score)
 {
   if(!sit)
   {
