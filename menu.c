@@ -18,7 +18,7 @@ opt st_menu(SDL_Surface **ecran) //draws the start menu containing the game mode
   char opti[6][20] = {"New Game","Continue","Skynet","Man VS Machine","Best Scores","Quit"};
   SDL_Rect pos;
   TTF_Font *police = NULL;
-  SDL_Color black = {0,0,0},blue = {0,0,255};
+  SDL_Color black = {255,255,255},blue = {140,140,140};
 
   TTF_Init();
 
@@ -43,7 +43,7 @@ opt st_menu(SDL_Surface **ecran) //draws the start menu containing the game mode
 void best_scores(SDL_Surface **ecran) //shows the top 5 players in the scoreboard
 {
   TTF_Font *police = NULL;
-  SDL_Color black = {0,0,0},blue = {0,0,255};
+  SDL_Color black = {255,255,255},blue = {140,140,140};
   SDL_Surface *tmp[2],*swp,*back = NULL;
   SDL_Rect pos,p;
   SDL_Event event;
@@ -135,7 +135,7 @@ void menu(SDL_Surface **ecran) //handles the changes in the start menu(selection
     SDL_Rect pos,p,p1;
     SDL_Event event;
     TTF_Font *police = NULL;
-    SDL_Color black = {0,0,0},blue = {0,0,255};
+    SDL_Color black = {255,255,255},blue = {140,140,140};
     game gm;
     int c = 1,w = (*ecran)->w / 2 - 100,i,ch = -1,bst;
 
@@ -228,7 +228,7 @@ void round_menu(SDL_Surface **ecran,int score,int best,int time,int clr) //draws
 {
   SDL_Surface *tmp = NULL;
   TTF_Font *police = NULL;
-  SDL_Color black = {0,0,0},blue = {0,0,255},bck = {43,46,64},colr;
+  SDL_Color black = {255,255,255},blue = {140,140,140},bck = {31,34,40},colr;
   SDL_Rect pos;
   char opti[4][50] = {"Pause","","",""};
   sprintf(opti[1], "Score : %d", score);
@@ -261,7 +261,7 @@ void pause(SDL_Surface **ecran,int score,int best,choices T,field grille,int Gti
 {
   SDL_Surface *tmp = NULL,*swp = NULL,*back = NULL;
   TTF_Font *police = NULL;
-  SDL_Color black = {0,0,0},blue = {0,0,255},bck = {43,46,64};
+  SDL_Color black = {255,255,255},blue = {140,140,140},bck = {31,34,40};
   SDL_Rect pos;
   game gm;
   SDL_Event event;
@@ -416,7 +416,7 @@ void game_over(SDL_Surface **ecran,int sit,int score,int best,int *cnt) //draws 
     SDL_Delay(1000);
     SDL_Surface *tmp = NULL,*swp = NULL,*back = NULL,*swp1 = NULL,*swp2 = NULL;
     TTF_Font *police = NULL;
-    SDL_Color black = {0,0,0},blue = {0,0,255},bck = {43,46,64};
+    SDL_Color black = {255,255,255},blue = {140,140,140},bck = {31,34,40};
     SDL_Rect pos,p;
     game gm;
     SDL_Event event;

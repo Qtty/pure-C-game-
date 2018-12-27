@@ -14,7 +14,7 @@ typedef struct cord // a struct that represents the coordinates of a field slot
 	int x,y;
 }cord;
 
-typedef struct cellule //a type representing linked chains 
+typedef struct cellule //a type representing linked chains
 {
 
 	struct cellule  *nxt;
@@ -168,7 +168,7 @@ choices draw(SDL_Surface **ecran,SDL_Surface *objs[54],int best) // draws the in
     obj[i%27] = objs[i];
   }
 
-  SDL_FillRect(*ecran,NULL,SDL_MapRGB((*ecran)->format,43,46,64));
+  SDL_FillRect(*ecran,NULL,SDL_MapRGB((*ecran)->format,31,34,40));
 
   tmp = SDL_CreateRGBSurface(SDL_HWSURFACE,1,340,32,0,0,0,0);
   SDL_FillRect(tmp,NULL,SDL_MapRGB(tmp->format,0,0,0));
@@ -282,7 +282,7 @@ void check_lines(SDL_Surface **ecran,field *grill,int *line)//checks if there is
       tmp = SDL_CreateRGBSurface(SDL_HWSURFACE,36,35,32,0,0,0,0);
       tmp1 = SDL_CreateRGBSurface(SDL_HWSURFACE,36,35,32,0,0,0,0);
       SDL_FillRect(tmp,NULL,SDL_MapRGB(tmp->format,255,255,255));
-      SDL_FillRect(tmp1,NULL,SDL_MapRGB(tmp1->format,43,46,64));
+      SDL_FillRect(tmp1,NULL,SDL_MapRGB(tmp1->format,31,34,40));
       pos.y = 0;
       pos.x = i*34;
       for(ok=0;ok<10;ok++)
@@ -331,7 +331,7 @@ void check_lines(SDL_Surface **ecran,field *grill,int *line)//checks if there is
       tmp = SDL_CreateRGBSurface(SDL_HWSURFACE,36,35,32,0,0,0,0);
       tmp1 = SDL_CreateRGBSurface(SDL_HWSURFACE,36,35,32,0,0,0,0);
       SDL_FillRect(tmp,NULL,SDL_MapRGB(tmp->format,255,255,255));
-      SDL_FillRect(tmp1,NULL,SDL_MapRGB(tmp1->format,43,46,64));
+      SDL_FillRect(tmp1,NULL,SDL_MapRGB(tmp1->format,31,34,40));
       pos.x = 0;
       pos.y = i*34;
       for(ok=0;ok<10;ok++)
@@ -802,7 +802,7 @@ void drag(SDL_Surface **ecran,SDL_Surface *piece,field *grill,choices *t,int i,S
           p.x = i * 115;
 
           tmp = SDL_CreateRGBSurface(SDL_HWSURFACE,obj[pc]->w,obj[pc]->h,32,0,0,0,0);
-          SDL_FillRect(tmp,NULL,SDL_MapRGB(tmp->format,43,46,64));
+          SDL_FillRect(tmp,NULL,SDL_MapRGB(tmp->format,31,34,40));
           SDL_BlitSurface(tmp,NULL,*ecran,&p);
           SDL_Flip(*ecran);
 
@@ -833,7 +833,7 @@ void play(SDL_Surface **ecran,field *gr,choices *T,int *scr,int *Gtime,int best,
   SDL_Event event;
   SDL_Rect p;
   TTF_Font *police = NULL;
-  SDL_Color black = {0,0,0},blue = {0,0,255},bck = {43,46,64},colr;
+  SDL_Color black = {0,0,0},blue = {0,0,255},bck = {31,34,40},colr;
   choices t;
   field grill;
   int c = 1,i,j = 11,pt = time(NULL),score = 0;
