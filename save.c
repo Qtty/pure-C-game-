@@ -88,13 +88,13 @@ void add_score(int score,char usr[20]) //adds a player to the scoreboard
   fclose(scr);
 }
 
-void load_score(SDL_Surface **ecran) //loads the scoreboard containing the top 5 players 
+void load_score(SDL_Surface **ecran) //loads the scoreboard containing the top 5 players
 {
   FILE *scr;
   SDL_Surface *tmp = NULL;
   SDL_Rect pos;
   TTF_Font *police = NULL;
-  SDL_Color black = {0,0,0};
+  SDL_Color black = {255,255,255};
   char t[50];
   int i = 1;
   player p;
