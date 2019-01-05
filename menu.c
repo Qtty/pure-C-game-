@@ -58,6 +58,7 @@ void best_scores(SDL_Surface **ecran) //shows the top 5 players in the scoreboar
 
   TTF_Init();
 
+  if(TTF_Init() == -1)
 {
     fprintf(stderr, "Erreur d'initialisation de TTF_Init : %s\n", TTF_GetError());
     exit(EXIT_FAILURE);
