@@ -203,14 +203,17 @@ void menu(SDL_Surface **ecran) //handles the changes in the start menu(selection
     {
       case 0:
         init(ecran,510,510);
-        play(ecran,&(gm.gr),&(gm.T),&(gm.scr),&(gm.Gtime),bst,1);
+        play(ecran,&(gm.gr),&(gm.T),&(gm.scr),&(gm.Gtime),bst,1,0);
         break;
       case 1:
         init(ecran,510,510);
         c = load(ecran,&gm);
-        if(c) play(ecran,&(gm.gr),&(gm.T),&(gm.scr),&(gm.Gtime),bst,0);
-        else play(ecran,&(gm.gr),&(gm.T),&(gm.scr),&(gm.Gtime),bst,1);
+        if(c) play(ecran,&(gm.gr),&(gm.T),&(gm.scr),&(gm.Gtime),bst,0,0);
+        else play(ecran,&(gm.gr),&(gm.T),&(gm.scr),&(gm.Gtime),bst,1,0);
         break;
+      case 2:
+        init(ecran,510,510);
+        play(ecran,&(gm.gr),&(gm.T),&(gm.scr),&(gm.Gtime),bst,1,1);
       case 4:
         init(ecran,340,510);
         best_scores(ecran);
@@ -369,7 +372,7 @@ void pause(SDL_Surface **ecran,int score,int best,choices T,field grille,int Gti
                 if(check(event.button.x,w + 250,w + 250 + tt.t[2]->w))
                 {
                   init(ecran,510,510);
-                  play(ecran,&(gm.gr),&(gm.T),&(gm.scr),&(gm.Gtime),best,1);
+                  play(ecran,&(gm.gr),&(gm.T),&(gm.scr),&(gm.Gtime),best,1,0);
                   *cnt = 0;
                   c = 0;
                   break;
@@ -508,7 +511,7 @@ void game_over(SDL_Surface **ecran,int sit,int score,int best,int *cnt) //draws 
                   pos.x = 0;
                   pos.y = 0;
                   init(ecran,510,510);
-                  play(ecran,&(gm.gr),&(gm.T),&(gm.scr),&(gm.Gtime),best,1);
+                  play(ecran,&(gm.gr),&(gm.T),&(gm.scr),&(gm.Gtime),best,1,0);
                   c = 0;
                   *cnt = 0;
                   break;
