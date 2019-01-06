@@ -1,138 +1,4 @@
-typedef struct choices //a struct containing the three pieces to choose from
-{
-  int c[3];
-}choices;
-
-typedef struct field //a struct containing the matrice that simulates the field,meaning the free and used slots in the field
-{
-  int f[10][10];
-}field;
-
-typedef struct cord // a struct that represents the coordinates of a field slot
-{
-
-	int x,y;
-}cord;
-
-typedef struct cellule //a type representing linked chains
-{
-
-	struct cellule  *nxt;
-																				//typedef struct cellule{...} *LS;
-	cord info;
-
-}*LS;
-
-LS cree_noued()
-{
-	LS p = NULL;
-
-	p = malloc(sizeof(LS));
-	if(p == NULL)
-	{
-		printf("error\n");
-		exit(-1);
-	}
-	return p;
-}
-
-LS initpile()
-{
-	LS p = NULL;
-
-	return p;
-}
-
-int pilevide(LS p)
-{
-
-	if(p == NULL)
-	{
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
-}
-
-void empiler(LS *p,cord c)
-{
-
-	LS q = NULL;
-
-	q = cree_noued();
-	q->info = c;
-	q->nxt = *p;
-	*p = q;
-
-}
-
-cord desempiler(LS *p)
-{
-	LS tmp;
-  cord c;
-
-  c = (*p)->info;
-	tmp = *p;
-	*p = (*p)->nxt;
-	free(tmp);
-  return c;
-}
-
-LS cords(field grill)
-{
-	LS p,q = NULL;
-	cord tar,t,tmp,init;
-
-  init.x = 0;
-  init.y = 0;
-
-  while(grill.f[init.x][init.y] == -1)
-  {
-    init.x++;
-  }
-
-	p = malloc(sizeof(LS));
-	p->info = init;
-	p->nxt = NULL;
-	while(!pilevide(p))
-	{
-		tar = desempiler(&p);
-		if(grill.f[tar.x][tar.y] == 1)
-		{
-     			grill.f[tar.x][tar.y] = -1;
-   			tmp.x = tar.x - init.x;
-  			tmp.y = tar.y - init.y;
-			empiler(&q,tmp);
-			if(tar.x - 1 >=0)
-			{
-				t.x = tar.x - 1;
-				t.y = tar.y;
-				empiler(&p,t);
-			}
-			if(tar.x + 1 < 10)
-			{
-				t.x = tar.x + 1;
-				t.y = tar.y;
-				empiler(&p,t);
-			}
-			if(tar.y - 1 >=0)
-			{
-				t.x = tar.x;
-				t.y = tar.y - 1;
-				empiler(&p,t);
-			}
-			if(tar.y + 1 < 10)
-			{
-				t.x = tar.x;
-				t.y = tar.y + 1;
-				empiler(&p,t);
-			}
-		}
-	}
-  return q;
-}
+#include "ai.c"
 
 void init_field(field *grill,int c) //sets all the slots in the matrice to an integer c
 {
@@ -827,7 +693,7 @@ void drag(SDL_Surface **ecran,SDL_Surface *piece,field *grill,choices *t,int i,S
 
 }
 
-void play(SDL_Surface **ecran,field *gr,choices *T,int *scr,int *Gtime,int best,int sit) //handles the screen,initializes the pieces in an array,initializes the field matrice into zeros,handles the selection in the round menu and updates the round informations
+void play(SDL_Surface **ecran,field *gr,choices *T,int *scr,int *Gtime,int best,int sit,int ai) //handles the screen,initializes the pieces in an array,initializes the field matrice into zeros,handles the selection in the round menu and updates the round informations
 {
   SDL_Surface *objs[54],*tmp = NULL;
   SDL_Event event;
@@ -836,7 +702,8 @@ void play(SDL_Surface **ecran,field *gr,choices *T,int *scr,int *Gtime,int best,
   SDL_Color black = {0,0,0},blue = {0,0,255},bck = {31,34,40},colr;
   choices t;
   field grill;
-  int c = 1,i,j = 11,pt = time(NULL),score = 0;
+  pec xd;
+  int c = 1,i,j = 11,pt = time(NULL),score = 0,r;
 
   if(sit) init_field(&grill,0);
   else grill = *gr;
@@ -886,82 +753,152 @@ void play(SDL_Surface **ecran,field *gr,choices *T,int *scr,int *Gtime,int best,
 
   p.x = 400;
   p.y = 50;
-
-  while (c)
+  if(!ai)
   {
-    SDL_WaitEvent(&event);
-    i = 1;
-
-    switch (event.type)
+    while (c)
     {
+      SDL_WaitEvent(&event);
+      i = 1;
 
-      case SDL_QUIT:
-        c = 0;
-        break;
+      switch (event.type)
+      {
 
-      case SDL_MOUSEBUTTONDOWN:
-        if(event.button.button == SDL_BUTTON_LEFT)
-        {
-          if((check(event.button.y,50,50 + tmp->h))&&(check(event.button.x,360,360 + tmp->w)))
+        case SDL_QUIT:
+          c = 0;
+          break;
+
+        case SDL_MOUSEBUTTONDOWN:
+          if(event.button.button == SDL_BUTTON_LEFT)
           {
-            pause(ecran,score,best,t,grill,(time(NULL) - pt)/60,&c);
-            break;
-          }
-
-          if(event.button.y > 340)
-          {
-
-            if (check(event.button.x,0,110))
+            if((check(event.button.y,50,50 + tmp->h))&&(check(event.button.x,360,360 + tmp->w)))
             {
-              drag(ecran,objs[t.c[0]],&grill,&t,0,objs,&score);
-              //break;
+              pause(ecran,score,best,t,grill,(time(NULL) - pt)/60,&c);
+              break;
             }
-            else
+
+            if(event.button.y > 340)
             {
-              if(check(event.button.x,115,225))
+
+              if (check(event.button.x,0,110))
               {
-                drag(ecran,objs[t.c[1]],&grill,&t,1,objs,&score);
+                drag(ecran,objs[t.c[0]],&grill,&t,0,objs,&score);
                 //break;
               }
               else
               {
-                if(check(event.button.x,230,340))
+                if(check(event.button.x,115,225))
                 {
-                  drag(ecran,objs[t.c[2]],&grill,&t,2,objs,&score);
+                  drag(ecran,objs[t.c[1]],&grill,&t,1,objs,&score);
                   //break;
                 }
+                else
+                {
+                  if(check(event.button.x,230,340))
+                  {
+                    drag(ecran,objs[t.c[2]],&grill,&t,2,objs,&score);
+                    //break;
+                  }
+                }
               }
+              game_over(ecran,check_game(t,&grill),score,best,&c);
             }
-            game_over(ecran,check_game(t,&grill),score,best,&c);
+
+          }
+          break;
+
+        case SDL_MOUSEMOTION:
+          p.x = event.motion.x;
+          p.y = event.motion.y;
+          if(check(p.x,360,360 + tmp->w) && check(p.y,50,50 + tmp->h))
+          {
+
+            i = 0;
+
+          }
+          else
+          {
+            i = 1;
           }
 
-        }
-        break;
+          break;
 
-      case SDL_MOUSEMOTION:
-        p.x = event.motion.x;
-        p.y = event.motion.y;
-        if(check(p.x,360,360 + tmp->w) && check(p.y,50,50 + tmp->h))
-        {
 
-          i = 0;
+      }
+      if(score>best) best = score;
+      round_menu(ecran,score,best,time(NULL) - pt,i);
+      SDL_Flip(*ecran);
 
-        }
-        else
-        {
-          i = 1;
-        }
-
-        break;
 
 
     }
-    if(score>best) best = score;
-    round_menu(ecran,score,best,time(NULL) - pt,i);
-    SDL_Flip(*ecran);
+  }
+  else
+  {
+    while (c)
+    {
+      //SDL_WaitEvent(&event);
+      xd = choose(t,&grill);
+      /*printf("\n");
+      for(size_t i=0;i<10;i++)
+      {
+        for(size_t j=0;j<10;j++)
+        {
+          printf("%d",grill.f[j][i]);
+        }
+        printf("\n");
+      }*/
+      drag_ai(ecran,xd,&t,objs,&score,&grill);
+      game_over(ecran,check_game(t,&grill),score,best,&c);
+      //SDL_Delay(2000);
+      /*scanf("%d",&r);
+      if(!r) exit(-1);*/
+      i = 1;
+
+      switch (event.type)
+      {
+
+        case SDL_QUIT:
+          c = 0;
+          break;
+
+        case SDL_MOUSEBUTTONDOWN:
+          if(event.button.button == SDL_BUTTON_LEFT)
+          {
+            if((check(event.button.y,50,50 + tmp->h))&&(check(event.button.x,360,360 + tmp->w)))
+            {
+              pause(ecran,score,best,t,grill,(time(NULL) - pt)/60,&c);
+              break;
+            }
+            game_over(ecran,check_game(t,&grill),score,best,&c);
+
+          }
+          break;
+
+        case SDL_MOUSEMOTION:
+          p.x = event.motion.x;
+          p.y = event.motion.y;
+          if(check(p.x,360,360 + tmp->w) && check(p.y,50,50 + tmp->h))
+          {
+
+            i = 0;
+
+          }
+          else
+          {
+            i = 1;
+          }
+
+          break;
+
+
+      }
+      if(score>best) best = score;
+      round_menu(ecran,score,best,time(NULL) - pt,i);
+      SDL_Flip(*ecran);
 
 
 
+    }
   }
   for(i=0;i<54;i++)
   {
