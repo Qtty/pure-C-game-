@@ -275,7 +275,7 @@ pec choose(choices t,field *grille)
         if(gaps[j] != 0) psb1[i] += (gaps[j] - g[j])*10;
         else psb1[i] += (10-g[j])*10;
       }
-      check_lines(&ec,&grill2,&line);
+      check_lines(&ec,&grill2,&line,0);
       handle_score(&(psb1[i]),line);
       line = 0;
       grill2 = *grille;
@@ -315,7 +315,7 @@ pec choose(choices t,field *grille)
   return pec1;
 }
 
-void drag_ai(SDL_Surface **ecran,pec pec1,choices *t,SDL_Surface *obj[54],int *score,field *grill)
+void drag_ai(SDL_Surface **ecran,pec pec1,choices *t,SDL_Surface *obj[54],int *score,field *grill,int mvm,int nch)
 {
   int scr,x,a = 0;
   float A,B,D;
@@ -324,15 +324,18 @@ void drag_ai(SDL_Surface **ecran,pec pec1,choices *t,SDL_Surface *obj[54],int *s
   x = pec1.x;
   pos = pec1.pos;
   printf("pos:%d,%d\n",pos.x,pos.y);
+  if(mvm) pos.x += 510;
 
   p.y = 0;
   p.x = 0;
   p1.y = 0;
   p1.x = 0;
-  tmp1 = SDL_CreateRGBSurface(SDL_HWSURFACE,510,510,32,0,0,0,0);
+  if (!mvm) tmp1 = SDL_CreateRGBSurface(SDL_HWSURFACE,510,510,32,0,0,0,0);
+  else tmp1 = SDL_CreateRGBSurface(SDL_HWSURFACE,510*2,510,32,0,0,0,0);
   SDL_BlitSurface(*ecran,NULL,tmp1,&p);
   p.y = 350;
   p.x = x * 115 + 70;
+  if (mvm) p.x += 510;
   D = p.x - pos.x;
   B = ((pos.y * p.x) - (p.y * pos.x)) / D;
   A = (p.y - pos.y) / D;
@@ -349,17 +352,19 @@ void drag_ai(SDL_Surface **ecran,pec pec1,choices *t,SDL_Surface *obj[54],int *s
   }
   SDL_BlitSurface(obj[(*t).c[x]],NULL,*ecran,&pos);
   //getchar();
-  check_lines(ecran,grill,&a);
+  check_lines(ecran,grill,&a,mvm);
   *score += pec1.scr;
   printf("a:%d\n",a);
   handle_score(score,a);
   a = (*t).c[x] + 27;
-  (*t).c[x] = rand() % 27;
+  if(!mvm) (*t).c[x] = rand() % 27;
+  else (*t).c[x] = nch;
 
 
 
   pos.y = 350;
   pos.x = x * 115;
+  if (mvm) pos.x += 510;
   tmp1 = SDL_CreateRGBSurface(SDL_HWSURFACE,obj[a]->w,obj[a]->h,32,0,0,0,0);
   SDL_FillRect(tmp1,NULL,SDL_MapRGB(tmp1->format,31,34,40));
   SDL_BlitSurface(tmp1,NULL,*ecran,&pos);
