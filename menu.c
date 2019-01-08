@@ -203,17 +203,22 @@ void menu(SDL_Surface **ecran) //handles the changes in the start menu(selection
     {
       case 0:
         init(ecran,510,510);
-        play(ecran,&(gm.gr),&(gm.T),&(gm.scr),&(gm.Gtime),bst,1,0);
+        play(ecran,&(gm.gr),&(gm.T),&(gm.scr),&(gm.Gtime),bst,1,0,0);
         break;
       case 1:
         init(ecran,510,510);
         c = load(ecran,&gm);
-        if(c) play(ecran,&(gm.gr),&(gm.T),&(gm.scr),&(gm.Gtime),bst,0,0);
-        else play(ecran,&(gm.gr),&(gm.T),&(gm.scr),&(gm.Gtime),bst,1,0);
+        if(c) play(ecran,&(gm.gr),&(gm.T),&(gm.scr),&(gm.Gtime),bst,0,0,0);
+        else play(ecran,&(gm.gr),&(gm.T),&(gm.scr),&(gm.Gtime),bst,1,0,0);
         break;
       case 2:
         init(ecran,510,510);
-        play(ecran,&(gm.gr),&(gm.T),&(gm.scr),&(gm.Gtime),bst,1,1);
+        play(ecran,&(gm.gr),&(gm.T),&(gm.scr),&(gm.Gtime),bst,1,1,0);
+        break;
+      case 3:
+        init(ecran,510*2,510);
+        play(ecran,&(gm.gr),&(gm.T),&(gm.scr),&(gm.Gtime),bst,1,0,1);
+        break;
       case 4:
         init(ecran,340,510);
         best_scores(ecran);
@@ -227,7 +232,7 @@ void menu(SDL_Surface **ecran) //handles the changes in the start menu(selection
     TTF_Quit();
 }
 
-void round_menu(SDL_Surface **ecran,int score,int best,int time,int clr) //draws the round menu(pause,score,best socre,time elapsed)
+void round_menu(SDL_Surface **ecran,int score,int best,int time,int clr,int mvm,int score_ai) //draws the round menu(pause,score,best socre,time elapsed)
 {
   SDL_Surface *tmp = NULL;
   TTF_Font *police = NULL;
@@ -256,11 +261,21 @@ void round_menu(SDL_Surface **ecran,int score,int best,int time,int clr) //draws
       tmp = TTF_RenderText_Shaded(police,opti[i],black,bck);
       SDL_BlitSurface(tmp,NULL,*ecran,&pos);
   }
+  if(mvm)
+  {
+    pos.x += 510;
+    pos.y = 50;
+    pos.y += 50;
+    sprintf(opti[1], "AI Score : %d", score_ai);
+    tmp = TTF_RenderText_Shaded(police,opti[1],black,bck);
+    SDL_BlitSurface(tmp,NULL,*ecran,&pos);
+    SDL_Flip(*ecran);
+  }
   TTF_CloseFont(police);
   TTF_Quit();
 }
 
-void pause(SDL_Surface **ecran,int score,int best,choices T,field grille,int Gtime,int *cnt) //draws and handles the pause menu(save,continue,replay,shows score,shows best score,shows scoreboard)
+void pause(SDL_Surface **ecran,int score,int best,choices T,field grille,int Gtime,int *cnt,int mvm,int score_ai) //draws and handles the pause menu(save,continue,replay,shows score,shows best score,shows scoreboard)
 {
   SDL_Surface *tmp = NULL,*swp = NULL,*back = NULL;
   TTF_Font *police = NULL;
@@ -272,7 +287,8 @@ void pause(SDL_Surface **ecran,int score,int best,choices T,field grille,int Gti
   char scr[2][25],options[3][9] = {"Save","Continue","Replay"};
   int c = 1,w;
 
-  swp = SDL_CreateRGBSurface(SDL_HWSURFACE,510,510,32,0,0,0,0);
+  if(!mvm) swp = SDL_CreateRGBSurface(SDL_HWSURFACE,510,510,32,0,0,0,0);
+  else swp = SDL_CreateRGBSurface(SDL_HWSURFACE,510*2,510,32,0,0,0,0);
   pos.x = 0;
   pos.y = 0;
   SDL_BlitSurface(*ecran,NULL,swp,&pos);
@@ -291,11 +307,18 @@ void pause(SDL_Surface **ecran,int score,int best,choices T,field grille,int Gti
   w = (*ecran)->w / 2 - 150;
   pos.x = w;
   pos.y = 50;
+  if(mvm) pos.y -= 40;
   for(size_t i=0;i<2;i++)
   {
     tmp = TTF_RenderText_Blended(police,scr[i],black);
     SDL_BlitSurface(tmp,NULL,*ecran,&pos);
     pos.y += 50;
+  }
+  if(mvm)
+  {
+    sprintf(scr[1], "AI Score : %d", score_ai);
+    tmp = TTF_RenderText_Blended(police,scr[1],black);
+    SDL_BlitSurface(tmp,NULL,*ecran,&pos);
   }
 
   pos.x = 0;
@@ -351,7 +374,8 @@ void pause(SDL_Surface **ecran,int score,int best,choices T,field grille,int Gti
               SDL_Delay(2000);
               pos.x = 0;
               pos.y = 0;
-              init(ecran,510,510);
+              if(!mvm) init(ecran,510,510);
+              else init(ecran,510*2,510);
               SDL_BlitSurface(swp,NULL,*ecran,&pos);
               c = 0;
               break;
@@ -362,7 +386,8 @@ void pause(SDL_Surface **ecran,int score,int best,choices T,field grille,int Gti
               {
                 pos.x = 0;
                 pos.y = 0;
-                init(ecran,510,510);
+                if(!mvm) init(ecran,510,510);
+                else init(ecran,510*2,510);
                 SDL_BlitSurface(swp,NULL,*ecran,&pos);
                 c = 0;
                 break;
@@ -371,8 +396,9 @@ void pause(SDL_Surface **ecran,int score,int best,choices T,field grille,int Gti
               {
                 if(check(event.button.x,w + 250,w + 250 + tt.t[2]->w))
                 {
-                  init(ecran,510,510);
-                  play(ecran,&(gm.gr),&(gm.T),&(gm.scr),&(gm.Gtime),best,1,0);
+                  if(!mvm) init(ecran,510,510);
+                  else init(ecran,510*2,510);
+                  play(ecran,&(gm.gr),&(gm.T),&(gm.scr),&(gm.Gtime),best,1,0,mvm);
                   *cnt = 0;
                   c = 0;
                   break;
@@ -412,7 +438,7 @@ void pause(SDL_Surface **ecran,int score,int best,choices T,field grille,int Gti
     }
 }
 
-void game_over(SDL_Surface **ecran,int sit,int score,int best,int *cnt) //draws and handles the game-over menu(adds the player to the scoreboard,replay,quit,shows score,shows best score)
+void game_over(SDL_Surface **ecran,int sit,int score,int best,int *cnt,int ai,int mvm) //draws and handles the game-over menu(adds the player to the scoreboard,replay,quit,shows score,shows best score)
 {
   if(!sit)
   {
@@ -511,7 +537,7 @@ void game_over(SDL_Surface **ecran,int sit,int score,int best,int *cnt) //draws 
                   pos.x = 0;
                   pos.y = 0;
                   init(ecran,510,510);
-                  play(ecran,&(gm.gr),&(gm.T),&(gm.scr),&(gm.Gtime),best,1,0);
+                  play(ecran,&(gm.gr),&(gm.T),&(gm.scr),&(gm.Gtime),best,1,ai,mvm);
                   c = 0;
                   *cnt = 0;
                   break;
