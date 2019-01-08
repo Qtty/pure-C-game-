@@ -21,7 +21,11 @@ opt st_menu(SDL_Surface **ecran) //draws the start menu containing the game mode
   SDL_Color black = {255,255,255},blue = {140,140,140};
 
   TTF_Init();
-
+  if(TTF_Init() == -1)
+{
+    fprintf(stderr, "Erreur d'initialisation de TTF_Init : %s\n", TTF_GetError());
+    exit(EXIT_FAILURE);
+}
   police = TTF_OpenFont("Fonts/DejaVuSerif.ttf",30);
   TTF_SetFontStyle(police,TTF_STYLE_ITALIC);
   pos.x = (*ecran)->w / 2 - 100;
@@ -53,6 +57,12 @@ void best_scores(SDL_Surface **ecran) //shows the top 5 players in the scoreboar
   p.y = 0;
 
   TTF_Init();
+
+  if(TTF_Init() == -1)
+{
+    fprintf(stderr, "Erreur d'initialisation de TTF_Init : %s\n", TTF_GetError());
+    exit(EXIT_FAILURE);
+}
 
   back = IMG_Load("sprites/back.png");
   SDL_BlitSurface(back,NULL,*ecran,&p);
@@ -140,6 +150,12 @@ void menu(SDL_Surface **ecran) //handles the changes in the start menu(selection
     int c = 1,w = (*ecran)->w / 2 - 100,i,ch = -1,bst;
 
     TTF_Init();
+
+    if(TTF_Init() == -1)
+{
+    fprintf(stderr, "Erreur d'initialisation de TTF_Init : %s\n", TTF_GetError());
+    exit(EXIT_FAILURE);
+}
 
     tmp = IMG_Load("sprites/back.png");
     p.x = 0;
@@ -245,6 +261,12 @@ void round_menu(SDL_Surface **ecran,int score,int best,int time,int clr,int mvm,
 
   TTF_Init();
 
+if(TTF_Init() == -1)
+{
+    fprintf(stderr, "Erreur d'initialisation de TTF_Init : %s\n", TTF_GetError());
+    exit(EXIT_FAILURE);
+}
+
   if(clr) colr = black;
   else colr = blue;
 
@@ -294,6 +316,12 @@ void pause(SDL_Surface **ecran,int score,int best,choices T,field grille,int Gti
   SDL_BlitSurface(*ecran,NULL,swp,&pos);
 
   TTF_Init();
+
+if(TTF_Init() == -1)
+{
+    fprintf(stderr, "Erreur d'initialisation de TTF_Init : %s\n", TTF_GetError());
+    exit(EXIT_FAILURE);
+}
 
   init(ecran,340,510);
 
@@ -461,6 +489,12 @@ void game_over(SDL_Surface **ecran,int sit,int score,int best,int *cnt,int ai,in
     SDL_BlitSurface(*ecran,NULL,swp,&pos);
 
     TTF_Init();
+
+    if(TTF_Init() == -1)
+{
+    fprintf(stderr, "Erreur d'initialisation de TTF_Init : %s\n", TTF_GetError());
+    exit(EXIT_FAILURE);
+}
 
     init(ecran,340,510);
     back = IMG_Load("sprites/back.png");

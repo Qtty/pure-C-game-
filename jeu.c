@@ -17,8 +17,14 @@ void init(SDL_Surface **ecran,int x,int y) //initialize the screen
 {
   SDL_Init(SDL_INIT_VIDEO);
 
+  if (SDL_Init(SDL_INIT_VIDEO) == -1) 
+    {
+        fprintf(stderr, "Initialization error of the SDL : %s\n", SDL_GetError()); 
+        exit(EXIT_FAILURE); 
+    }
+   SDL_WM_SetIcon(SDL_LoadBMP("sprites/icon.bmp"), NULL); 
   *ecran = SDL_SetVideoMode(x,y,32,SDL_HWSURFACE | SDL_DOUBLEBUF);
-  SDL_WM_SetCaption("jeu",NULL);
+  SDL_WM_SetCaption("block puzzle game",NULL);
 
 }
 
