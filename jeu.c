@@ -22,12 +22,13 @@ void init(SDL_Surface **ecran,int x,int y) //initialize the screen
 
 }
 
-choices draw(SDL_Surface **ecran,SDL_Surface *objs[54],int best) // draws the initial state of the screen
+choices draw(SDL_Surface **ecran,SDL_Surface *objs[54],int best,int mvm) // draws the initial state of the screen
 {
   SDL_Surface *tmp = NULL,*obj[27];
   choices t;
   SDL_Rect pos;
   int i,j;
+
 
   for(i=27;i<54;i++)
   {
@@ -46,6 +47,16 @@ choices draw(SDL_Surface **ecran,SDL_Surface *objs[54],int best) // draws the in
 
     SDL_BlitSurface(tmp,NULL,*ecran,&pos);
   }
+  if(mvm)
+  {
+    for(i=510;i<=510+340;i += 34)
+    {
+      pos.x = i;
+      pos.y = 0;
+
+      SDL_BlitSurface(tmp,NULL,*ecran,&pos);
+    }
+  }
 
   tmp = SDL_CreateRGBSurface(SDL_HWSURFACE,340,1,32,0,0,0,0);
   SDL_FillRect(tmp,NULL,SDL_MapRGB(tmp->format,0,0,0));
@@ -57,22 +68,39 @@ choices draw(SDL_Surface **ecran,SDL_Surface *objs[54],int best) // draws the in
 
     SDL_BlitSurface(tmp,NULL,*ecran,&pos);
   }
+  if(mvm)
+  {
+    for(i=0;i<=340;i += 34)
+    {
+      pos.x = 510;
+      pos.y = i;
+
+      SDL_BlitSurface(tmp,NULL,*ecran,&pos);
+    }
+  }
   pos.y = 350;
   pos.x = 0;
   for(i=0;i<3;i++)
   {
     j = rand() % 27;
-    /*if(i==2)
-    {
-      j = 6;
-    }*/
     t.c[i] = j;
     SDL_BlitSurface(obj[j],NULL,*ecran,&pos);
     pos.x += 115;
 
   }
+  if(mvm)
+  {
+    pos.x = 510;
+    for(i=0;i<3;i++)
+    {
+      SDL_BlitSurface(obj[t.c[i]],NULL,*ecran,&pos);
+      pos.x += 115;
 
-  round_menu(ecran,0,best,0,1);
+    }
+  }
+
+  if(!mvm) round_menu(ecran,0,best,0,1,0,0);
+  else round_menu(ecran,0,best,0,1,1,0);
 
   SDL_Flip(*ecran);
 
@@ -120,7 +148,7 @@ void b3(int i,field *grill,SDL_Rect pos)
   }
 }
 
-void check_lines(SDL_Surface **ecran,field *grill,int *line)//checks if there is any complete lines or columns
+void check_lines(SDL_Surface **ecran,field *grill,int *line,int mvm)//checks if there is any complete lines or columns
 {
   int i,j,ok;
   SDL_Surface *tmp = NULL,*tmp1 = NULL;
@@ -151,6 +179,7 @@ void check_lines(SDL_Surface **ecran,field *grill,int *line)//checks if there is
       SDL_FillRect(tmp1,NULL,SDL_MapRGB(tmp1->format,31,34,40));
       pos.y = 0;
       pos.x = i*34;
+      if(mvm) pos.x += 510;
       for(ok=0;ok<10;ok++)
       {
         SDL_BlitSurface(tmp,NULL,*ecran,&pos);
@@ -170,6 +199,7 @@ void check_lines(SDL_Surface **ecran,field *grill,int *line)//checks if there is
       pos.x += 34;
       SDL_BlitSurface(tmp,NULL,*ecran,&pos);
       pos.x = 0;
+      if(mvm) pos.x += 510;
       pos.y = 0;
       for(ok=0;ok<=10;ok++)
       {
@@ -199,6 +229,7 @@ void check_lines(SDL_Surface **ecran,field *grill,int *line)//checks if there is
       SDL_FillRect(tmp,NULL,SDL_MapRGB(tmp->format,255,255,255));
       SDL_FillRect(tmp1,NULL,SDL_MapRGB(tmp1->format,31,34,40));
       pos.x = 0;
+      if(mvm) pos.x += 510;
       pos.y = i*34;
       for(ok=0;ok<10;ok++)
       {
@@ -215,10 +246,12 @@ void check_lines(SDL_Surface **ecran,field *grill,int *line)//checks if there is
       tmp1 = SDL_CreateRGBSurface(SDL_HWSURFACE,1,340,32,0,0,0,0);
       SDL_FillRect(tmp,NULL,SDL_MapRGB(tmp->format,0,0,0));
       pos.x = 0;
+      if(mvm) pos.x += 510;
       SDL_BlitSurface(tmp,NULL,*ecran,&pos);
       pos.y += 34;
       SDL_BlitSurface(tmp,NULL,*ecran,&pos);
       pos.x = 0;
+      if(mvm) pos.x += 510;
       pos.y = 0;
       for(ok=0;ok<=10;ok++)
       {
@@ -672,7 +705,7 @@ void drag(SDL_Surface **ecran,SDL_Surface *piece,field *grill,choices *t,int i,S
           SDL_BlitSurface(tmp,NULL,*ecran,&p);
           SDL_Flip(*ecran);
 
-          check_lines(ecran,grill,&nb_blc);
+          check_lines(ecran,grill,&nb_blc,0);
           handle_score(score,nb_blc);
           SDL_BlitSurface(obj[(*t).c[i] + 27],NULL,*ecran,&p);
           SDL_Flip(*ecran);
@@ -693,20 +726,22 @@ void drag(SDL_Surface **ecran,SDL_Surface *piece,field *grill,choices *t,int i,S
 
 }
 
-void play(SDL_Surface **ecran,field *gr,choices *T,int *scr,int *Gtime,int best,int sit,int ai) //handles the screen,initializes the pieces in an array,initializes the field matrice into zeros,handles the selection in the round menu and updates the round informations
+void play(SDL_Surface **ecran,field *gr,choices *T,int *scr,int *Gtime,int best,int sit,int ai,int mvm) //handles the screen,initializes the pieces in an array,initializes the field matrice into zeros,handles the selection in the round menu and updates the round informations
 {
   SDL_Surface *objs[54],*tmp = NULL;
   SDL_Event event;
   SDL_Rect p;
   TTF_Font *police = NULL;
   SDL_Color black = {0,0,0},blue = {0,0,255},bck = {31,34,40},colr;
-  choices t;
-  field grill;
+  choices t,t_ai;
+  field grill,grill_ai;
   pec xd;
-  int c = 1,i,j = 11,pt = time(NULL),score = 0,r;
+  int c = 1,i,j = 11,pt = time(NULL),score = 0,score_ai = 0,r,pl = 0,nch;
 
   if(sit) init_field(&grill,0);
   else grill = *gr;
+
+  if(mvm) init_field(&grill_ai,0);
 
   if(!sit) pt -= (*Gtime) * 60;
 
@@ -746,17 +781,34 @@ void play(SDL_Surface **ecran,field *gr,choices *T,int *scr,int *Gtime,int best,
     j++;
   }
 
-  if(sit) t = draw(ecran,objs,best);
+  if(sit) t = draw(ecran,objs,best,mvm);
   else t = *T;
 
   if(!sit) score = *scr;
 
   p.x = 400;
   p.y = 50;
+  if (mvm) t_ai = t;
   if(!ai)
   {
     while (c)
     {
+      if(mvm)
+      {
+        if(pl)
+        {
+          for(size_t u=0;u<3;u++)
+          {
+            if(t.c[u] != t_ai.c[u]) {nch = t.c[u];break;}
+          }
+          xd = choose(t_ai,&grill_ai);
+          drag_ai(ecran,xd,&t_ai,objs,&score_ai,&grill_ai,1,nch);
+          game_over(ecran,check_game(t_ai,&grill_ai),score_ai,best,&c,ai,mvm);
+        }
+        pl = 0;
+      }
+      if (!mvm) round_menu(ecran,score,best,time(NULL) - pt,i,0,0);
+      else round_menu(ecran,score,best,time(NULL) - pt,i,1,score_ai);
       SDL_WaitEvent(&event);
       i = 1;
 
@@ -772,7 +824,7 @@ void play(SDL_Surface **ecran,field *gr,choices *T,int *scr,int *Gtime,int best,
           {
             if((check(event.button.y,50,50 + tmp->h))&&(check(event.button.x,360,360 + tmp->w)))
             {
-              pause(ecran,score,best,t,grill,(time(NULL) - pt)/60,&c);
+              pause(ecran,score,best,t,grill,(time(NULL) - pt)/60,&c,mvm,score_ai);
               break;
             }
 
@@ -782,26 +834,24 @@ void play(SDL_Surface **ecran,field *gr,choices *T,int *scr,int *Gtime,int best,
               if (check(event.button.x,0,110))
               {
                 drag(ecran,objs[t.c[0]],&grill,&t,0,objs,&score);
-                //break;
               }
               else
               {
                 if(check(event.button.x,115,225))
                 {
                   drag(ecran,objs[t.c[1]],&grill,&t,1,objs,&score);
-                  //break;
                 }
                 else
                 {
                   if(check(event.button.x,230,340))
                   {
                     drag(ecran,objs[t.c[2]],&grill,&t,2,objs,&score);
-                    //break;
                   }
                 }
               }
-              game_over(ecran,check_game(t,&grill),score,best,&c);
+              game_over(ecran,check_game(t,&grill),score,best,&c,ai,mvm);
             }
+            pl = 1;
 
           }
           break;
@@ -825,7 +875,12 @@ void play(SDL_Surface **ecran,field *gr,choices *T,int *scr,int *Gtime,int best,
 
       }
       if(score>best) best = score;
-      round_menu(ecran,score,best,time(NULL) - pt,i);
+      if (mvm)
+      {
+        if(score_ai>best) best = score;
+      }
+      if (!mvm) round_menu(ecran,score,best,time(NULL) - pt,i,0,0);
+      else round_menu(ecran,score,best,time(NULL) - pt,i,1,score_ai);
       SDL_Flip(*ecran);
 
 
@@ -836,22 +891,9 @@ void play(SDL_Surface **ecran,field *gr,choices *T,int *scr,int *Gtime,int best,
   {
     while (c)
     {
-      //SDL_WaitEvent(&event);
       xd = choose(t,&grill);
-      /*printf("\n");
-      for(size_t i=0;i<10;i++)
-      {
-        for(size_t j=0;j<10;j++)
-        {
-          printf("%d",grill.f[j][i]);
-        }
-        printf("\n");
-      }*/
-      drag_ai(ecran,xd,&t,objs,&score,&grill);
-      game_over(ecran,check_game(t,&grill),score,best,&c);
-      //SDL_Delay(2000);
-      /*scanf("%d",&r);
-      if(!r) exit(-1);*/
+      drag_ai(ecran,xd,&t,objs,&score,&grill,0,0);
+      game_over(ecran,check_game(t,&grill),score,best,&c,ai,mvm);
       i = 1;
 
       switch (event.type)
@@ -866,10 +908,10 @@ void play(SDL_Surface **ecran,field *gr,choices *T,int *scr,int *Gtime,int best,
           {
             if((check(event.button.y,50,50 + tmp->h))&&(check(event.button.x,360,360 + tmp->w)))
             {
-              pause(ecran,score,best,t,grill,(time(NULL) - pt)/60,&c);
+              pause(ecran,score,best,t,grill,(time(NULL) - pt)/60,&c,mvm,score_ai);
               break;
             }
-            game_over(ecran,check_game(t,&grill),score,best,&c);
+            game_over(ecran,check_game(t,&grill),score,best,&c,ai,mvm);
 
           }
           break;
@@ -893,7 +935,7 @@ void play(SDL_Surface **ecran,field *gr,choices *T,int *scr,int *Gtime,int best,
 
       }
       if(score>best) best = score;
-      round_menu(ecran,score,best,time(NULL) - pt,i);
+      if(!mvm) round_menu(ecran,score,best,time(NULL) - pt,i,0,0);
       SDL_Flip(*ecran);
 
 
